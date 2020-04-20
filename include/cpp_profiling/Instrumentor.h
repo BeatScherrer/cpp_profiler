@@ -7,7 +7,7 @@
  * Enable profiling with passing -DPROFILING=1 (may be conditional on other stuff, e.g.
  * cmake build type)
  *
-
+ * @example example.cpp
  */
 
 #include <algorithm>
@@ -56,7 +56,6 @@ struct InstrumentationSession {
  * }
  * @endcode
  *
- * @example example.cpp
  */
 class Instrumentor {
  public:

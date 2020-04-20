@@ -1,6 +1,7 @@
 /**
  * @file example.cpp
  *
+ * @example
  */
 
 #include <cpp_profiling/Instrumentor.h>

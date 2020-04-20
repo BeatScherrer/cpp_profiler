@@ -1,6 +1,7 @@
 /**
  * @file Instrumentor.cpp
  * @brief Definition of the Instrumentor class.
+ *
  */
 
 #include "cpp_profiling/Instrumentor.h"
