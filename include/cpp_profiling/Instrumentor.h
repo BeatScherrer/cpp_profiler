@@ -7,14 +7,7 @@
  * Enable profiling with passing -DPROFILING=1 (may be conditional on other stuff, e.g.
  * cmake build type)
  *
- * Use as followed:
- * @code
- * void testFunction() {
- *   PROFILE_FUNCTION();
- *
- *   ...
- * }
- * @endcode
+
  */
 
 #include <algorithm>
@@ -53,13 +46,20 @@ struct InstrumentationSession {
   std::string name;
 };
 
-
-/** The Singleton Instrumentor creates sessions and manages the output of the InstrumentationTimer.
+/** The Singleton Instrumentor creates sessions and manages the output of the
+ * InstrumentationTimer. Use as followed:
+ * @code
+ * void testFunction() {
+ *   PROFILE_FUNCTION();
  *
+ *   ...
+ * }
+ * @endcode
+ *
+ * @example example.cpp
  */
 class Instrumentor {
  public:
-
   /** Begin a profiling session.
    *
    * @param name name of the session.
@@ -84,7 +84,6 @@ class Instrumentor {
   static Instrumentor& get();
 
  private:
-
   /** Declare constructor private to get a singleton. */
   Instrumentor();
 
@@ -104,7 +103,6 @@ class Instrumentor {
 /** Creates a timer on construction and stops it upon destruction. */
 class InstrumentationTimer {
  public:
-
   /** Default constructor.
    *
    * @param name name of the timer.
