@@ -33,51 +33,93 @@
 #define PROFILE_SCOPE(name)
 #endif
 
+/** Holds the profiling results:
+ * - name
+ * - start-time, end-time
+ * - thread id
+ */
 struct ProfileResult {
   std::string name;
   long long start, end;
   uint32_t thread_id;
 };
 
+/** A Instrumentation Session is defined by a name. */
 struct InstrumentationSession {
   std::string name;
 };
 
+
+/** The Instrumentor creates sessions and manages the times for each session.
+ *
+ */
 class Instrumentor {
  public:
 
+  /** Begin a profiling session.
+   *
+   * @param name name of the session.
+   * @param filepath Path to the file of the session.
+   */
   void beginSession(const std::string& name,
                     const std::string& filepath = "results.json");
 
+  /** terminates a profiling session. */
   void endSession();
 
+  /** Writes a profile to a file. */
   void writeProfile(const ProfileResult& result);
 
+  /** Writes the json header. */
   void writeHeader();
+
+  /** Writes the json footer. */
   void writeFooter();
 
+  /** Return the static instance of the Instrumentor. */
   static Instrumentor& get();
 
  private:
+
+  /** Declare constructor private to get a singleton. */
   Instrumentor();
 
+  /// Pointer to current session.
   std::unique_ptr<InstrumentationSession> current_session_;
+
+  /// Current output stream.
   std::ofstream output_stream_;
+
+  /// Profile counter.
   int profile_count_;
 
+  /// Mutex to protect the file from concurrent writes.
   std::mutex file_mutex_;
 };
 
+/** Creates a timer on construction and stops it upon destruction. */
 class InstrumentationTimer {
  public:
+
+  /** Default constructor.
+   *
+   * @param name name of the timer.
+   */
   InstrumentationTimer(const char* name);
 
+  /** Default destructor. */
   ~InstrumentationTimer();
 
+  /** Stops the timer. */
   void stop();
 
  private:
+  /// Name of the timer.
   const char* name_;
+
+  /// Start time of the timer.
   std::chrono::time_point<std::chrono::high_resolution_clock> start_timepoint_;
+
+  /// Flag to show if the timer has been stopped.
   bool stopped_;
 };
