@@ -46,36 +46,44 @@ install(DIRECTORY include/ DESTINATION include)
 # )
 
 # export the targets directly in the ...Config.cmake file
-install(EXPORT ${PROJECT_NAME}_targets
-        FILE
-          ${PROJECT_NAME}Config.cmake
-        NAMESPACE
-          ${PROJECT_NAME}::
-        DESTINATION
-          ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+if(NOT BUILD_FOR_CATKIN)
+  install(EXPORT ${PROJECT_NAME}_targets
+          FILE
+            ${PROJECT_NAME}Config.cmake
+          NAMESPACE
+            ${PROJECT_NAME}::
+          DESTINATION
+            ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
+else()
+  message(STATUS "building for catkin, not exporting targets")
+endif()
 
 # ------------------------------------------------------------------------------
 # Doxygen
 # ------------------------------------------------------------------------------
-# TODO add only for release?
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-  # set input and output file
-  set (DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
-  set (DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+message(STATUS ${BUILD_DOC})
+if(BUILD_DOC)
+  message(STATUS "building documentation...")
 
-  # configure the file
-  configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-  message("Doxygen build started")
+  find_package(Doxygen)
+  if(DOXYGEN_FOUND)
+    # set input and output file
+    set (DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+    set (DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
-  #option ALL allows to build the docs together with the project
-  add_custom_target(dox_doxygen ALL
-    COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Generating API documentation with Doxygen"
-    VERBATIM
-  )
-else (DOXYGEN_FOUND)
-  message ("Doxygen need to be installed to generated the doxygen documentation")
-endif (DOXYGEN_FOUND)
+    # configure the file
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    message("Doxygen build started")
+
+    #option ALL allows to build the docs together with the project
+    add_custom_target(dox_doxygen ALL
+      COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      COMMENT "Generating API documentation with Doxygen"
+      VERBATIM
+    )
+  else (DOXYGEN_FOUND)
+    message ("Doxygen need to be installed to generated the doxygen documentation")
+  endif ()
+endif()
