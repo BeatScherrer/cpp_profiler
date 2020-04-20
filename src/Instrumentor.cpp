@@ -6,6 +6,8 @@
 
 #include "cpp_profiling/Instrumentor.h"
 
+namespace cpp_profiling {
+
 // ------------------------------------------------------------------------------
 // Instrumentor
 // ------------------------------------------------------------------------------
@@ -96,3 +98,5 @@ void InstrumentationTimer::stop() {
 
   stopped_ = true;
 }
+
+} // namespace cpp_profiling

@@ -23,12 +23,15 @@
 
 // check if profiling is enabled
 #if PROFILING == 1
-#define PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__(name)
+#define PROFILE_SCOPE(name) cpp_profiling::InstrumentationTimer timer##__LINE__(name)
+// TODO is there a macro for function with signature for overrides?
 #define PROFILE_FUNCTION PROFILE_SCOPE(__func__)
 #else
 // set macro to nothing
 #define PROFILE_FUNCTION
 #endif
+
+namespace cpp_profiling {
 
 /** Holds the profiling results:
  * - name
@@ -124,3 +127,5 @@ class InstrumentationTimer {
   /// Flag to show if the timer has been stopped.
   bool stopped_;
 };
+
+} // namespace cpp_profiling
