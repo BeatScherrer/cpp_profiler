@@ -3,7 +3,7 @@
  * @brief Definition of the Instrumentor class.
  */
 
-#include "profiling/Instrumentor.h"
+#include "cpp_profiling/Instrumentor.h"
 
 // ------------------------------------------------------------------------------
 // Instrumentor

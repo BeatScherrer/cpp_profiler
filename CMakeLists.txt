@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(profiling VERSION 0.0.1 LANGUAGES CXX)
+project(cpp_profiling VERSION 0.0.1 LANGUAGES CXX)
 
 # ------------------------------------------------------------------------------
 # Build
@@ -11,14 +11,18 @@ add_library(${PROJECT_NAME}
   src/Instrumentor.cpp
 )
 
+# c++17
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+
+# Include directories
 target_include_directories(${PROJECT_NAME}
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+# namespaced alias
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ------------------------------------------------------------------------------
@@ -31,19 +35,22 @@ install(TARGETS ${PROJECT_NAME}
         EXPORT ${PROJECT_NAME}_targets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
-        INCLUDES DESTINATION include
 )
+install(DIRECTORY include/ DESTINATION include)
 
-write_basic_package_version_file(
-  ${PROJECT_NAME}ConfigVersion.cmake
-  VERSION ${PACKAGE_VERSION}
-  COMPATIBILITY AnyNewerVersion
-)
+# TODO support find_package with version
+# write_basic_package_version_file(
+#   ${PROJECT_NAME}ConfigVersion.cmake
+#   VERSION ${PACKAGE_VERSION}
+#   COMPATIBILITY AnyNewerVersion
+# )
 
 # export the targets directly in the ...Config.cmake file
 install(EXPORT ${PROJECT_NAME}_targets
-        FILE ${PROJECT_NAME}Config.cmake
-        NAMESPACE ${PROJECT_NAME}::${PROJECT_NAME}
-        DESTINATION lib/cmake/${PROJECT_NAME}
+        FILE
+          ${PROJECT_NAME}Config.cmake
+        NAMESPACE
+          ${PROJECT_NAME}::
+        DESTINATION
+          ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )

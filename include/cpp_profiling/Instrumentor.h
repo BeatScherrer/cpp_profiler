@@ -7,13 +7,14 @@
  * Enable profiling with passing -DPROFILING=1 (may be conditional on other stuff, e.g.
  * cmake build type)
  *
- * Use as follows:
+ * Use as followed:
+ * @code
  * void testFunction() {
  *   PROFILE_FUNCTION();
  *
  *   ...
  * }
- *
+ * @endcode
  */
 
 #include <algorithm>
@@ -24,13 +25,16 @@
 
 #include <thread>
 
+// TODO set to 0 by default
+#define PROFILING 1
+
 // check if profiling is enabled
 #if PROFILING == 1
 #define PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__(name)
-#define PROFILE_FUNCTION PROFILE_SCOPE(__FUNCSIG__)
+#define PROFILE_FUNCTION PROFILE_SCOPE(__func__)
 #else
 // set macro to nothing
-#define PROFILE_SCOPE(name)
+#define PROFILE_FUNCTION
 #endif
 
 /** Holds the profiling results:
@@ -50,7 +54,7 @@ struct InstrumentationSession {
 };
 
 
-/** The Instrumentor creates sessions and manages the times for each session.
+/** The Singleton Instrumentor creates sessions and manages the output of the InstrumentationTimer.
  *
  */
 class Instrumentor {
