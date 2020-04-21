@@ -6,6 +6,8 @@ project(cpp_profiling VERSION 0.0.1 LANGUAGES CXX)
 # Build
 # ------------------------------------------------------------------------------
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Profiling library
 add_library(${PROJECT_NAME}
   src/Instrumentor.cpp
@@ -14,7 +16,10 @@ add_library(${PROJECT_NAME}
 
 # c++17
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_EXTENSIONS OFF)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  CXX_EXTENSIONS OFF # disable compiler extensions to avoid issues with c++17
+  CMAKE_POSITION_INDEPENDENT_CODE T # -fPIC
+)
 
 # Include directories
 target_include_directories(${PROJECT_NAME}
@@ -31,6 +36,7 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 # ------------------------------------------------------------------------------
 include(CMakePackageConfigHelpers)
 
+# Install files
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${PROJECT_NAME}_targets
         LIBRARY DESTINATION lib
@@ -38,6 +44,7 @@ install(TARGETS ${PROJECT_NAME}
 )
 install(DIRECTORY include/ DESTINATION include)
 
+# ...Config-version.cmake
 write_basic_package_version_file(
   ${PROJECT_NAME}ConfigVersion.cmake
   VERSION ${PACKAGE_VERSION}

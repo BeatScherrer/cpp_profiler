@@ -20,11 +20,7 @@
 
 namespace cpp_profiling {
 
-/** Holds the profiling results:
- * - name
- * - start-time, end-time
- * - thread id
- */
+/** Datatype to hold the profiling results. */
 struct ProfileResult {
   std::string name;
   long long start, end;
