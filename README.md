@@ -46,16 +46,24 @@ yay cpp_profiler
 ```
 
 ### simple_catkin (ROS)
-For use with [simple_catkin](https://github.com/catkin/catkin_simple) specify the following catkin support rep as dependency:
+For use with [simple_catkin](https://github.com/catkin/catkin_simple) add the catkin support repo [cpp_profiling_catkin](https://github.com/BeatScherrer/cpp_profiling_catkin) as dependency:
 
 ```lang=xml
 <build_dependency>cpp_profiling_catkin</build_dependency>
 ```
 
+optionally it can be added to the `*.rosinstall` file for use with [wstool](http://wiki.ros.org/wstool):
+
+```lang=yaml
+- git:
+    local-name: cpp_profiling_catkin
+    uri: git@github.com:BeatScherrer/cpp_profiling_catkin.git
+```
+
 Currently the catkin support repo needs the library to be installed on the system but I plan on adding a switch to get it from github in case it is not found.
 
 ## Usage
-The profiling library makes use of macros to only be defined in case the `PROFILING` variable is defined.
+The profiling library makes use of macros to only be defined in case the `PROFILING` variable is `true`.
 To profile a function just use the following macros:
 
 ```lang=cpp
@@ -87,4 +95,4 @@ To contribute just use the provided `.clang-format` formatting.
 ## TODO
 
 - Create a timer for multiple function calls to get statistical values
-- Add support for overwrite (currently `__func__` is used to name the profile)
+- Add support for overloaded functions (currently `__func__` is used to name the profile)
