@@ -3,6 +3,13 @@ cmake_minimum_required(VERSION 3.1)
 project(cpp_profiling VERSION 0.0.1 LANGUAGES CXX)
 
 # ------------------------------------------------------------------------------
+# Dependencies
+# ------------------------------------------------------------------------------
+
+# GLog
+find_package(glog 0.4.0 REQUIRED)
+
+# ------------------------------------------------------------------------------
 # Build
 # ------------------------------------------------------------------------------
 
@@ -30,6 +37,11 @@ target_include_directories(${PROJECT_NAME}
 
 # namespaced alias
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
+# link
+target_link_libraries(${PROJECT_NAME}
+  glog::glog
+)
 
 # ------------------------------------------------------------------------------
 # Installation

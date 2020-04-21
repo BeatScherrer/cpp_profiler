@@ -45,6 +45,8 @@ struct InstrumentationSession {
  */
 class Instrumentor {
  public:
+  ~Instrumentor();
+
   /** Begin a profiling session.
    *
    * @param name name of the session.

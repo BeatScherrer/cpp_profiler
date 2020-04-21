@@ -5,20 +5,32 @@
  */
 
 #include "cpp_profiling/Instrumentor.h"
+#include "glog/logging.h"
 
 namespace cpp_profiling {
 
-Instrumentor::Instrumentor()
-  : current_session_(nullptr), profile_count_(0) {}
+Instrumentor::Instrumentor() : current_session_(nullptr), profile_count_(0) {}
+
+Instrumentor::~Instrumentor() { endSession(); }
 
 void Instrumentor::beginSession(const std::string& name, const std::string& filepath) {
+  LOG(INFO) << "beginning session '" << "name" << "'" << std::endl;
+
   output_stream_.open(filepath);
-  writeHeader();
-  current_session_ = std::make_unique<InstrumentationSession>();
-  current_session_->name = name;
+
+  // sanity check
+  if (output_stream_.is_open()) {
+    writeHeader();
+    current_session_ = std::make_unique<InstrumentationSession>();
+    current_session_->name = name;
+  } else {
+    LOG(ERROR) << "could not open file " << filepath << std::endl;
+  }
 }
 
 void Instrumentor::endSession() {
+  LOG(INFO) << "ending session '" << current_session_->name << "'" << std::endl;
+
   writeFooter();
   output_stream_.close();
   current_session_ = nullptr;
@@ -49,6 +61,8 @@ void Instrumentor::writeProfile(const ProfileResult& result) {
 }
 
 void Instrumentor::writeHeader() {
+  LOG(INFO) << "writing json header" << std::endl;
+
   std::lock_guard<std::mutex> lock(file_mutex_);
 
   output_stream_ << "{\"otherData\": {},\"traceEvents\":[";
@@ -56,6 +70,8 @@ void Instrumentor::writeHeader() {
 }
 
 void Instrumentor::writeFooter() {
+  LOG(INFO) << "writing json footer" << std::endl;
+
   std::lock_guard<std::mutex> lock(file_mutex_);
 
   output_stream_ << "]}";
@@ -67,4 +83,4 @@ Instrumentor& Instrumentor::get() {
   return instance;
 }
 
-} // namespace cpp_profiling
+}  // namespace cpp_profiling
