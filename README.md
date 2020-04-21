@@ -20,15 +20,10 @@ create a build directory and cd into it
 mkdir build && cd build
 ```
 
-run cmake in the build directory
+run cmake in the build directory and compile the sources:
 
 ```lang=sh
 cmake ..
-```
-
-compile the sources
-
-```lang=sh
 make
 ```
 
