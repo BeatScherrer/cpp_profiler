@@ -15,7 +15,7 @@ void simple_function() {
 }
 
 int main(int argc, char** argv) {
-  cpp_profiling::Instrumentor::get().beginSession('example-session');
+  cpp_profiling::Instrumentor::get().beginSession("example-session");
 
   simple_function();
 

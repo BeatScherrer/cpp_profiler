@@ -9,6 +9,7 @@ project(cpp_profiling VERSION 0.0.1 LANGUAGES CXX)
 # Profiling library
 add_library(${PROJECT_NAME}
   src/Instrumentor.cpp
+  src/InstrumentationTimer.cpp
 )
 
 # c++17
@@ -28,7 +29,6 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 # ------------------------------------------------------------------------------
 # Installation
 # ------------------------------------------------------------------------------
-
 include(CMakePackageConfigHelpers)
 
 install(TARGETS ${PROJECT_NAME}
@@ -38,14 +38,15 @@ install(TARGETS ${PROJECT_NAME}
 )
 install(DIRECTORY include/ DESTINATION include)
 
-# TODO support find_package with version
-# write_basic_package_version_file(
-#   ${PROJECT_NAME}ConfigVersion.cmake
-#   VERSION ${PACKAGE_VERSION}
-#   COMPATIBILITY AnyNewerVersion
-# )
+write_basic_package_version_file(
+  ${PROJECT_NAME}ConfigVersion.cmake
+  VERSION ${PACKAGE_VERSION}
+  COMPATIBILITY AnyNewerVersion
+)
 
-# export the targets directly in the ...Config.cmake file
+# export the targets directly in the ...Config.cmake file if not building for catkin
+# export targets separatly and include in ...Config.cmake if dependencies need to be
+# included first!
 if(NOT BUILD_FOR_CATKIN)
   install(EXPORT ${PROJECT_NAME}_targets
           FILE
@@ -62,7 +63,6 @@ endif()
 # ------------------------------------------------------------------------------
 # Doxygen
 # ------------------------------------------------------------------------------
-message(STATUS ${BUILD_DOC})
 if(BUILD_DOC)
   message(STATUS "building documentation...")
 
