@@ -47,6 +47,7 @@ target_link_libraries(${PROJECT_NAME}
 # Installation
 # ------------------------------------------------------------------------------
 include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
 
 # Install files
 install(TARGETS ${PROJECT_NAME}
